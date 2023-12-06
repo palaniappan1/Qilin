@@ -1,3 +1,4 @@
+package docs.example.example01.src;
 
 class Main {
   public static void main(String[] args) {

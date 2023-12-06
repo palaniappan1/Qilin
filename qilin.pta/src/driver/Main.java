@@ -23,11 +23,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qilin.core.PTA;
 import qilin.core.PTAScene;
+import qilin.core.builder.FakeAndroidMainFactory;
 import qilin.pta.PTAConfig;
 import qilin.util.MemoryWatcher;
 import qilin.util.PTAUtils;
 import qilin.util.Stopwatch;
 import soot.PackManager;
+import soot.Scene;
 import soot.jimple.toolkits.callgraph.CallGraph;
 import soot.options.Options;
 
@@ -47,8 +49,30 @@ public class Main {
             PTAUtils.dumpJimple(jimplePath);
             System.out.println("Jimple files have been dumped to: " + jimplePath);
         }
+//        logger.info("Constructing the callgraph...");
+//        PackManager.v().getPack("cg").apply();
+//        CallGraph cg = PTAScene.v().getCallGraph();
+//        System.out.println("#CALLGRAPH:" + cg.size());
         pta = PTAFactory.createPTA(PTAConfig.v().getPtaConfig().ptaPattern);
-        pta.run();
+        pta.run(PTAConfig.v().getAppConfig().sootScene);
+        return pta;
+    }
+
+    public static PTA getPTA(Scene scene, String[] args){
+        /* Example arguments for this method
+        java driver.Main  -pae -pe -clinit=ONFLY -lcs -mh -pta=insens -apppath /Users/palaniappanmuthuraman/Desktop/Qilin_Example
+        -mainclass Example  -jre=artifact/benchmarks/JREs/jre1.6.0_45 -se -dumppts
+         */
+        new PTAOption().parseCommandLine(args);
+        if(scene != null) {
+            PTAScene.v(scene);
+        }
+        else{
+            setupSoot();
+        }
+        PTA pta;
+        pta = PTAFactory.createPTA(PTAConfig.v().getPtaConfig().ptaPattern);
+        pta.run(PTAConfig.v().getAppConfig().sootScene);
         return pta;
     }
 
@@ -69,6 +93,12 @@ public class Main {
         setSootClassPath(PTAConfig.v());
         PTAScene.v().addBasicClasses();
         PTAScene.v().loadNecessaryClasses();
+    }
+
+    public static void setupSoot(Scene scene){
+        setSootOptions(PTAConfig.v());
+        setSootClassPath(PTAConfig.v());
+        PTAScene.v(scene);
     }
 
     /**
@@ -225,7 +255,7 @@ public class Main {
         logger.info("Constructing the callgraph using " + PTAConfig.v().callgraphAlg + "...");
         if (PTAConfig.v().callgraphAlg == PTAConfig.CallgraphAlgorithm.QILIN) {
             PTA pta = PTAFactory.createPTA(PTAConfig.v().getPtaConfig().ptaPattern);
-            pta.run();
+//            pta.run(PTAConfig.v().getAppConfig().sootScene);
         } else {
             PackManager.v().getPack("cg").apply();
         }
@@ -248,6 +278,27 @@ public class Main {
 
     public static void main(String[] args) {
         mainRun(args);
-        // mainCG(args);
+//        mainDummyRun();
+//        System.out.println(new FakeAndroidMainFactory().getFakeMain().getActiveBody());
+//         mainCG(args);
+    }
+
+    private static void mainDummyRun() {
+        getPTA(CreateDummyScene.getDummySootScene(), generateArgs().split("\n"));
+    }
+
+    private static String generateArgs() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("-sootSceneProvided\n");
+//        stringBuilder.append("-pae\n");
+//        stringBuilder.append("-pe\n");
+        stringBuilder.append("-clinit=ONFLY\n");
+//        stringBuilder.append("-lcs\n");
+//        stringBuilder.append("-mh\n");
+        // This is the place where we should, add the proper pta algorithm we need
+        stringBuilder.append("-pta=insens" + "\n");
+//        stringBuilder.append("-se\n");
+//        stringBuilder.append("-cg\n");
+        return stringBuilder.toString();
     }
 }

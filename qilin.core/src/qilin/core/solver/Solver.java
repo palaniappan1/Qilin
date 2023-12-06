@@ -26,7 +26,6 @@ import qilin.core.builder.ExceptionHandler;
 import qilin.core.builder.MethodNodeFactory;
 import qilin.core.pag.*;
 import qilin.core.sets.DoublePointsToSet;
-import qilin.core.sets.HybridPointsToSet;
 import qilin.core.sets.P2SetVisitor;
 import qilin.core.sets.PointsToSetInternal;
 import qilin.util.PTAUtils;
@@ -63,12 +62,12 @@ public class Solver extends Propagator {
     }
 
     @Override
-    public void propagate() {
+    public void propagate(boolean isSceneProvided) {
         final QueueReader<MethodOrMethodContext> newRMs = rmQueue.reader();
         final QueueReader<Node> newPAGEdges = edgeQueue.reader();
         final QueueReader<ExceptionThrowSite> newThrows = throwSiteQueue.reader();
         final QueueReader<VirtualCallSite> newCalls = virtualCallSiteQueue.reader();
-        cgb.initReachableMethods();
+        cgb.initReachableMethods(isSceneProvided);
         processStmts(newRMs);
         pag.getAlloc().forEach((a, set) -> set.forEach(v -> propagatePTS(v, a)));
         while (!valNodeWorkList.isEmpty()) {

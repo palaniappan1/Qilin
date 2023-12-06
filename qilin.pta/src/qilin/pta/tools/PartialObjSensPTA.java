@@ -66,7 +66,7 @@ public abstract class PartialObjSensPTA extends StagedPTA {
     @Override
     protected void preAnalysis() {
         Stopwatch sparkTimer = Stopwatch.newAndStart("Spark");
-        prePTA.pureRun();
+        prePTA.pureRun(PTAConfig.v().getAppConfig().sootScene);
         sparkTimer.stop();
         System.out.println(sparkTimer);
         select();

@@ -46,6 +46,7 @@ public class PTAOption extends Options {
 
     public PTAOption() {
         // input configurations
+        addOption("sootScene","sootSceneProvided", "Does the input has a soot Scene" );
         addOption("app", "apppath", "dir or jar",
                 "The directory containing the classes for the application or the application jar file (default: .)");
         addOption("lib", "libpath", "dir or jar",
@@ -158,6 +159,9 @@ public class PTAOption extends Options {
         // application configuration
         if (cmd.hasOption("mainclass")) {
             PTAConfig.v().getAppConfig().MAIN_CLASS = cmd.getOptionValue("mainclass");
+        }
+        if (cmd.hasOption("sootSceneProvided")) {
+            PTAConfig.v().getAppConfig().sootScene = true;
         }
         if (cmd.hasOption("jre")) {
             PTAConfig.v().getAppConfig().JRE = cmd.getOptionValue("jre");

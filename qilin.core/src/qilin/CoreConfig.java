@@ -117,6 +117,11 @@ public class CoreConfig {
         public String MAIN_CLASS = null;
 
         /**
+         * Whether SootScene is provided.
+         * */
+        public boolean sootScene = false;
+
+        /**
          * include selected packages which are not analyzed by default
          */
         public List<String> INCLUDE = null;

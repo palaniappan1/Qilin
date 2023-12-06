@@ -6,12 +6,13 @@ buildscript {
 
 plugins {
     id 'java'
+    id 'maven-publish'
     id "com.dorongold.task-tree" version "1.4"
 }
 
 group 'qilin'
 // version format: major.minor.patch
-version '0.9.4-SNAPSHOT'
+version '0.9.5-SNAPSHOT'
 
 java {
     toolchain {
@@ -21,6 +22,17 @@ java {
 
 repositories {
     mavenCentral()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.Qilin.qilin'
+            artifactId = 'qilin.driver.Main'
+            version = '0.9.6-SNAPSHOT'
+            from components.java
+        }
+    }
 }
 
 dependencies {
@@ -44,6 +56,7 @@ task fatJar(type: Jar, dependsOn: ['build']) {
         copy {
             from "$buildDir/libs/${archiveBaseName.get()}-${getArchiveVersion().get()}.jar"
             into "$rootDir/artifact/"
+            into "/Users/palaniappanmuthuraman/Documents/Project_Thesis/libs/"
         }
     }
 }

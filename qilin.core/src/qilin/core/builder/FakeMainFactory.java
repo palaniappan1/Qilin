@@ -27,6 +27,8 @@ import soot.jimple.JimpleBody;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class FakeMainFactory extends ArtificialMethod {
     public static int implicitCallEdges;

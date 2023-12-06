@@ -43,7 +43,7 @@ public class CallGraphBuilder {
     protected final Set<MethodOrMethodContext> reachMethods;
     private ChunkedQueue<MethodOrMethodContext> rmQueue;
 
-    protected final Set<Edge> calledges;
+    public final Set<Edge> calledges;
     protected final PTA pta;
     protected final PAG pag;
     protected CallGraph cicg;
@@ -106,15 +106,23 @@ public class CallGraphBuilder {
         });
     }
 
-    public List<MethodOrMethodContext> getEntryPoints() {
-        Node thisRef = pag.getMethodPAG(PTAScene.v().getFakeMainMethod()).nodeFactory().caseThis();
-        thisRef = pta.parameterize(thisRef, pta.emptyContext());
-        pag.addEdge(pta.getRootNode(), thisRef);
-        return Collections.singletonList(pta.parameterize(PTAScene.v().getFakeMainMethod(), pta.emptyContext()));
+    public List<MethodOrMethodContext> getEntryPoints(boolean isSceneProvided) {
+//        if(isSceneProvided){
+//            List<SootMethod> entryPoints = PTAScene.v().getScene().getEntryPoints();
+//            List<MethodOrMethodContext> listOfEntryPoints = new ArrayList<>();
+//            entryPoints.forEach(entryPoint -> listOfEntryPoints.add(pta.parameterize(entryPoint, pta.emptyContext())));
+//            return listOfEntryPoints;
+//        }
+//        else {
+            Node thisRef = pag.getMethodPAG(PTAScene.v().getFakeMainMethod()).nodeFactory().caseThis();
+            thisRef = pta.parameterize(thisRef, pta.emptyContext());
+            pag.addEdge(pta.getRootNode(), thisRef);
+            return Collections.singletonList(pta.parameterize(PTAScene.v().getFakeMainMethod(), pta.emptyContext()));
+//        }
     }
 
-    public void initReachableMethods() {
-        for (MethodOrMethodContext momc : getEntryPoints()) {
+    public void initReachableMethods(boolean isSceneProvided) {
+        for (MethodOrMethodContext momc : getEntryPoints(isSceneProvided)) {
             if (reachMethods.add(momc)) {
                 rmQueue.add(momc);
             }

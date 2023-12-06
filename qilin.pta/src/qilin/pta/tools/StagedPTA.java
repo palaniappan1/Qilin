@@ -36,12 +36,12 @@ public abstract class StagedPTA extends BasePTA {
     protected void mainAnalysis() {
         if (!PTAConfig.v().getPtaConfig().preAnalysisOnly) {
             System.out.println("selective pta starts!");
-            super.run();
+            super.run(PTAConfig.v().getAppConfig().sootScene);
         }
     }
 
     @Override
-    public void run() {
+    public void run(boolean isSootSceneProvided) {
         preAnalysis();
         prePTA.getPag().resetPointsToSet();
         mainAnalysis();

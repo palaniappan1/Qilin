@@ -26,6 +26,8 @@ import soot.util.Chain;
 import soot.util.IterableNumberer;
 import soot.util.StringNumberer;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class PTAScene {
@@ -44,9 +46,24 @@ public class PTAScene {
         return instance;
     }
 
+    public static PTAScene v(Scene sootScene){
+        if(instance == null){
+            synchronized (PTAScene.class){
+                if(instance == null){
+                    instance = new PTAScene(sootScene);
+                }
+            }
+        }
+        return instance;
+    }
+
     public static void junitReset() {
         VirtualCalls.reset();
         instance = null;
+    }
+
+    public Scene getScene(){
+        return this.sootScene;
     }
 
     public static void reset() {
@@ -60,6 +77,11 @@ public class PTAScene {
         this.fakeMainFactory = new FakeMainFactory();
     }
 
+    private PTAScene(Scene sootScene){
+        this.sootScene = sootScene;
+        this.fakeMainFactory = new FakeMainFactory();
+    }
+
     public final Set<SootMethod> nativeBuilt = DataFactory.createSet();
     public final Set<SootMethod> reflectionBuilt = DataFactory.createSet();
     public final Set<SootMethod> arraycopyBuilt = DataFactory.createSet();
@@ -68,6 +90,13 @@ public class PTAScene {
      * wrapper methods for FakeMain.
      * */
     public SootMethod getFakeMainMethod() {
+        if(sootScene != null){
+            List<SootMethod> entryPoints = sootScene.getEntryPoints();
+            Optional<SootMethod> dummyMainMethod = entryPoints.stream().filter(entryPoint -> entryPoint.getName().contains("dummyMainMethod")).findFirst();
+            if(dummyMainMethod.isPresent()){
+                return dummyMainMethod.get();
+            }
+        }
         return this.fakeMainFactory.getFakeMain();
     }
 
