@@ -51,7 +51,8 @@ public class ContextField extends ValNode {
                     throw new RuntimeException(baseHeapType + " is not an array type.");
                 }
             } else {
-                throw new RuntimeException("Context does not have any elements:" + context + ";" + field);
+//                throw new RuntimeException("Context does not have any elements:" + context + ";" + field);
+                field.getType();
             }
         }
         return field.getType();

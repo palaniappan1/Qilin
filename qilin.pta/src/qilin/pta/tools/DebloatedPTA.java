@@ -61,7 +61,7 @@ public class DebloatedPTA extends StagedPTA {
         } else {
             this.prePTA = new Spark();
         }
-        System.out.println("debloating ....");
+//        System.out.println("debloating ....");
     }
 
     /* this constructor is used to specify the debloating approach. */
@@ -75,15 +75,15 @@ public class DebloatedPTA extends StagedPTA {
         Stopwatch sparkTimer = Stopwatch.newAndStart("Spark");
         prePTA.pureRun(PTAConfig.v().getAppConfig().sootScene);
         sparkTimer.stop();
-        System.out.println(sparkTimer);
+//        System.out.println(sparkTimer);
         if (debloatApproach == DebloatApproach.CONCH) {
             Stopwatch conchTimer = Stopwatch.newAndStart("Conch");
             Conch hc = new Conch(prePTA);
             hc.runClassifier();
             this.ctxDepHeaps.addAll(hc.ctxDependentHeaps());
-            System.out.println();
+//            System.out.println();
             conchTimer.stop();
-            System.out.println(conchTimer);
+//            System.out.println(conchTimer);
         } else if (debloatApproach == DebloatApproach.DEBLOATERX) {
             Stopwatch debloaterXTimer = Stopwatch.newAndStart("DebloaterX");
             DebloaterX debloaterX = new DebloaterX(prePTA);
@@ -92,23 +92,23 @@ public class DebloatedPTA extends StagedPTA {
             for (AllocNode obj : mCtxDepHeaps) {
                 this.ctxDepHeaps.add(obj.getNewExpr());
             }
-            System.out.println();
+//            System.out.println();
             debloaterXTimer.stop();
-            System.out.println(debloaterXTimer);
+//            System.out.println(debloaterXTimer);
             // stat OAG reductions
             OAG oag = new OAG(prePTA);
             oag.build();
             OAG doag1 = new DebloatedOAG(prePTA, mCtxDepHeaps);
             doag1.build();
-            System.out.println("OAG #node:" + oag.nodeSize() + "; #edge:" + oag.edgeSize());
-            System.out.println("DebloaterX OAG #node:" + doag1.nodeSize() + "; #edge:" + doag1.edgeSize());
+//            System.out.println("OAG #node:" + oag.nodeSize() + "; #edge:" + oag.edgeSize());
+//            System.out.println("DebloaterX OAG #node:" + doag1.nodeSize() + "; #edge:" + doag1.edgeSize());
         } else {
             assert (debloatApproach == DebloatApproach.COLLECTION);
             Stopwatch collectionHeuristic = Stopwatch.newAndStart("COLLECTION");
             CollectionHeuristic ch = new CollectionHeuristic(prePTA);
             ch.run();
             collectionHeuristic.stop();
-            System.out.println(collectionHeuristic);
+//            System.out.println(collectionHeuristic);
             for (AllocNode obj : ch.getCtxDepHeaps()) {
                 this.ctxDepHeaps.add(obj.getNewExpr());
             }
@@ -118,7 +118,7 @@ public class DebloatedPTA extends StagedPTA {
     @Override
     protected void mainAnalysis() {
         if (!PTAConfig.v().getPtaConfig().preAnalysisOnly) {
-            System.out.println("selective pta starts!");
+//            System.out.println("selective pta starts!");
             basePTA.run(PTAConfig.v().getAppConfig().sootScene);
         }
     }

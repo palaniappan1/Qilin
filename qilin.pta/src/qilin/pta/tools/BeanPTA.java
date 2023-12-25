@@ -54,7 +54,7 @@ public class BeanPTA extends StagedPTA {
             this.heapAbst = new AllocSiteAbstractor();
         }
         prePTA = new Spark();
-        System.out.println("bean ...");
+//        System.out.println("bean ...");
     }
 
     @Override
@@ -62,10 +62,10 @@ public class BeanPTA extends StagedPTA {
         Stopwatch sparkTimer = Stopwatch.newAndStart("Spark");
         prePTA.pureRun(PTAConfig.v().getAppConfig().sootScene);
         sparkTimer.stop();
-        System.out.println(sparkTimer);
+//        System.out.println(sparkTimer);
         Stopwatch beanTimer = Stopwatch.newAndStart("Bean");
         Bean.run(prePTA, beanNexCtxMap);
         beanTimer.stop();
-        System.out.println(beanTimer);
+//        System.out.println(beanTimer);
     }
 }

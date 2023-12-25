@@ -550,7 +550,8 @@ public final class PTAUtils {
         Type type = heap.getType();
         if (type instanceof RefType refType && type != RefType.v("java.lang.Object")) {
             SootMethod finalizeMethod = VirtualCalls.v().resolveNonSpecial(refType, sigFinalize);
-            if (finalizeMethod != null && finalizeMethod.toString().equals("<java.lang.Object: void finalize()>")) {
+            if (finalizeMethod != null && (finalizeMethod.toString().equals("<java.lang.Object: void finalize()>") ||
+                    finalizeMethod.toString().equals("<java.io.FileOutputStream: void finalize()>"))) {
                 return false;
             }
             return finalizeMethod != null;

@@ -41,7 +41,7 @@ import java.util.Map;
 public class EaglePTA extends PartialObjSensPTA {
     public EaglePTA(int ctxLen) {
         super(ctxLen);
-        System.out.println("Eagle ....");
+//        System.out.println("Eagle ....");
     }
 
     @Override
@@ -50,19 +50,19 @@ public class EaglePTA extends PartialObjSensPTA {
         Eagle eagle = new Eagle();
         eagle.buildGraph(prePTA);
         timer.stop();
-        System.out.println(timer);
+//        System.out.println(timer);
         Stopwatch eagleTimer = Stopwatch.newAndStart("Eagle Selection");
         Map<Object, Integer> ret = eagle.contxtLengthAnalysis();
         eagleTimer.stop();
-        System.out.println(eagleTimer);
-        eagle.dumpCount();
+//        System.out.println(eagleTimer);
+//        eagle.dumpCount();
 //        try {
 //            writeToFile(ret);
 //        } catch (FileNotFoundException e) {
 //            System.out.println("no file exists for dumping eagle selected partial heaps/variables.");
 //        }
-        System.out.println("#Node:" + eagle.totalNodesCount());
-        System.out.println("#Edge:" + eagle.totalEdgesCount());
+//        System.out.println("#Node:" + eagle.totalNodesCount());
+//        System.out.println("#Edge:" + eagle.totalEdgesCount());
         return ret;
     }
 

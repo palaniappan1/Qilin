@@ -45,9 +45,9 @@ public class Turner {
         this.hk = k - 1;
         this.prePTA = pta;
         if (isModular) {
-            System.out.println("Turner with modularization ...");
+//            System.out.println("Turner with modularization ...");
         } else {
-            System.out.println("Turner ...");
+//            System.out.println("Turner ...");
         }
     }
 
@@ -127,8 +127,8 @@ public class Turner {
             });
             ret = ret2;
         }
-        System.out.println("#Node:" + this.total_node_count);
-        System.out.println("#Edge:" + this.total_edge_count);
+//        System.out.println("#Node:" + this.total_node_count);
+//        System.out.println("#Edge:" + this.total_edge_count);
         statObjInOCG(ret);
         return ret;
     }
@@ -158,12 +158,12 @@ public class Turner {
                 topandbottoms++;
             }
         }
-        System.out.println("#CIByOCG:" + cibyocg);
-        System.out.println("#CIByDFA:" + cibydfa);
-        System.out.println("#CSOBJ:" + csobj);
-        System.out.println("#CITOP:" + tops);
-        System.out.println("#CIBOT:" + bottoms);
-        System.out.println("#CITOPBOT:" + topandbottoms);
+//        System.out.println("#CIByOCG:" + cibyocg);
+//        System.out.println("#CIByDFA:" + cibydfa);
+//        System.out.println("#CSOBJ:" + csobj);
+//        System.out.println("#CITOP:" + tops);
+//        System.out.println("#CIBOT:" + bottoms);
+//        System.out.println("#CITOPBOT:" + topandbottoms);
     }
 
     private Collection<Object> computeCtxLevelForVariables(SootMethod method) {
@@ -217,12 +217,12 @@ public class Turner {
             int sccSize = scc.getContent().size();
             dist[sccSize]++;
         }
-        System.out.println("#scc count:" + sccCnt);
-        System.out.println("#scc count (exclude singleton):" + sccCntGtW);
-        System.out.println("Average scc size:" + avgScc);
-        System.out.println("Average scc size(exclude singleton):" + avgSccGtW);
-        System.out.println("Maximum scc size:" + maxScc);
-        System.out.println("Scc size distribution (size, count):");
+//        System.out.println("#scc count:" + sccCnt);
+//        System.out.println("#scc count (exclude singleton):" + sccCntGtW);
+//        System.out.println("Average scc size:" + avgScc);
+//        System.out.println("Average scc size(exclude singleton):" + avgSccGtW);
+//        System.out.println("Maximum scc size:" + maxScc);
+//        System.out.println("Scc size distribution (size, count):");
         for (int i = 0; i <= maxScc; ++i) {
             if (dist[i] > 0) {
                 System.out.println(i + "," + dist[i]);

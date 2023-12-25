@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         mavenCentral()
+        mavenLocal()
     }
 }
 
@@ -22,14 +23,15 @@ java {
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 publishing {
     publications {
         maven(MavenPublication) {
             groupId = 'com.Qilin.qilin'
-            artifactId = 'qilin.driver.Main'
-            version = '0.9.6-SNAPSHOT'
+            artifactId = 'qilin'
+            version = '0.9.5-SNAPSHOT'
             from components.java
         }
     }
@@ -94,14 +96,14 @@ subprojects {
         }
     }
 
-    publishing.repositories {
-        maven {
-            name = "GitHubPackages"
-            url = "https://maven.pkg.github.com/QiLinPTA/QiLin"
-            credentials {
-                username = project.findProperty("gpr.user") ?: "QiLinPTA"
-                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
-            }
-        }
-    }
+//    publishing.repositories {
+//        maven {
+//            name = "GitHubPackages"
+//            url = "https://maven.pkg.github.com/QiLinPTA/QiLin"
+//            credentials {
+//                username = project.findProperty("gpr.user") ?: "QiLinPTA"
+//                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+//            }
+//        }
+//    }
 }

@@ -48,7 +48,7 @@ public class MahjongPTA extends StagedPTA {
         this.ctxSel = new PipelineSelector(us, ds);
         this.heapAbst = new MahjongAbstractor(pag, mergedHeap, heapModelMap);
         this.prePTA = new Spark();
-        System.out.println("Mahjong ...");
+//        System.out.println("Mahjong ...");
     }
 
     @Override
@@ -70,8 +70,8 @@ public class MahjongPTA extends StagedPTA {
             }
         });
         csHeap.removeAll(mergedHeap);
-        System.out.println("#MERGE HEAP (not-single):" + mergedHeap.size());
-        System.out.println("#NON-MERGED HEAP (single):" + csHeap.size());
+//        System.out.println("#MERGE HEAP (not-single):" + mergedHeap.size());
+//        System.out.println("#NON-MERGED HEAP (single):" + csHeap.size());
 //        for (Object mh : mergedHeap) {
 //            System.out.println(mh);
 //        }
