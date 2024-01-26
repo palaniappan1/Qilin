@@ -19,11 +19,15 @@
 package qilin.core.builder;
 
 import qilin.CoreConfig;
+import qilin.android.AndroidManifestParser;
 import qilin.core.ArtificialMethod;
+import qilin.core.PTAScene;
 import qilin.util.PTAUtils;
 import soot.*;
 import soot.jimple.JimpleBody;
+import soot.options.Options;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -47,26 +51,41 @@ public class FakeMainFactory extends ArtificialMethod {
 
     private List<SootMethod> getEntryPoints() {
         List<SootMethod> ret = new ArrayList<>();
-        if (CoreConfig.v().getPtaConfig().clinitMode == CoreConfig.ClinitMode.FULL) {
-            ret.addAll(EntryPoints.v().clinits());
-        } else {
-            // on the fly mode, resolve the clinit methods on the fly.
-            ret.addAll(Collections.emptySet());
-        }
-
-        if (CoreConfig.v().getPtaConfig().singleentry) {
-            List<SootMethod> entries = EntryPoints.v().application();
-            if (entries.isEmpty()) {
-                throw new RuntimeException("Must specify MAINCLASS when appmode enabled!!!");
+//        if(CoreConfig.v().getAppConfig().APP_PATH.endsWith(".apk")){
+//            try {
+//                ArrayList<SootClass> sootClasses = new ArrayList<>(new AndroidManifestParser().parseAppAndResourcesAndReturnEntryPoints(CoreConfig.v().getAppConfig().APP_PATH));
+//                String fullyQualifiedClassName = sootClasses.get(0).toString();
+//                int indexOf = fullyQualifiedClassName.lastIndexOf('.');
+//                String sootClassName = fullyQualifiedClassName.substring(indexOf + 1);
+//                Options.v().set_main_class(sootClassName);
+//                Scene.v().setMainClass(PTAScene.v().getSootClass(sootClassName));
+//                ret.addAll(EntryPoints.v().application());
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//        else{
+            if (CoreConfig.v().getPtaConfig().clinitMode == CoreConfig.ClinitMode.FULL) {
+                ret.addAll(EntryPoints.v().clinits());
             } else {
-                ret.addAll(entries);
+                // on the fly mode, resolve the clinit methods on the fly.
+                ret.addAll(Collections.emptySet());
             }
-        } else {
-            System.out.println("include implicit entry!");
-            ret.addAll(EntryPoints.v().application());
-            ret.addAll(EntryPoints.v().implicit());
-        }
-        System.out.println("#EntrySize:" + ret.size());
+
+            if (CoreConfig.v().getPtaConfig().singleentry) {
+                List<SootMethod> entries = EntryPoints.v().application();
+                if (entries.isEmpty()) {
+                    throw new RuntimeException("Must specify MAINCLASS when appmode enabled!!!");
+                } else {
+                    ret.addAll(entries);
+                }
+            } else {
+                System.out.println("include implicit entry!");
+                ret.addAll(EntryPoints.v().application());
+                ret.addAll(EntryPoints.v().implicit());
+            }
+            System.out.println("#EntrySize:" + ret.size());
+//        }
         return ret;
     }
 

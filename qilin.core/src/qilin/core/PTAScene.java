@@ -60,6 +60,10 @@ public class PTAScene {
         this.fakeMainFactory = new FakeMainFactory();
     }
 
+    public SootClass createSootClassUnsafe(String className){
+        return sootScene.getSootClassUnsafe(className);
+    }
+
     public final Set<SootMethod> nativeBuilt = DataFactory.createSet();
     public final Set<SootMethod> reflectionBuilt = DataFactory.createSet();
     public final Set<SootMethod> arraycopyBuilt = DataFactory.createSet();

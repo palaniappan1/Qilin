@@ -21,13 +21,15 @@ package driver;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qilin.CoreConfig;
+import qilin.android.AndroidManifestParser;
 import qilin.core.PTA;
 import qilin.core.PTAScene;
 import qilin.pta.PTAConfig;
 import qilin.util.MemoryWatcher;
 import qilin.util.PTAUtils;
 import qilin.util.Stopwatch;
-import soot.PackManager;
+import soot.*;
 import soot.jimple.toolkits.callgraph.CallGraph;
 import soot.options.Options;
 
@@ -80,6 +82,20 @@ public class Main {
         dirs.add(appConfig.APP_PATH);
         Options.v().set_process_dir(dirs);
 
+        if(appConfig.APP_PATH.endsWith(".apk")){
+            Options.v().set_no_bodies_for_excluded(true);
+            Options.v().set_whole_program(true);
+            Options.v().set_src_prec(Options.src_prec_apk);
+            Options.v().set_process_multiple_dex(true);
+            Options.v().set_keep_offset(false);
+            Options.v().set_android_jars("/Users/palaniappanmuthuraman/Documents/android-platforms");
+            Options.v().set_throw_analysis(Options.throw_analysis_dalvik);
+            Options.v().set_ignore_resolution_errors(true);
+        }
+        else{
+            Options.v().set_src_prec(Options.src_prec_only_class);
+        }
+
         if (appConfig.MAIN_CLASS == null) {
             appConfig.MAIN_CLASS = PTAUtils.findMainFromMetaInfo(appConfig.APP_PATH);
         }
@@ -116,7 +132,6 @@ public class Main {
         Options.v().set_full_resolver(true);
 
         // Options.v().set_src_prec(Options.src_prec_class);
-        Options.v().set_src_prec(Options.src_prec_only_class);
         Options.v().set_allow_phantom_refs(true);
 
     }
@@ -131,8 +146,12 @@ public class Main {
         PTAConfig.ApplicationConfiguration appConfig = config.getAppConfig();
         // note that the order is important!
         cps.add(appConfig.APP_PATH);
-        cps.addAll(getLibJars(appConfig.LIB_PATH));
-        cps.addAll(getJreJars(appConfig.JRE));
+        if(!appConfig.APP_PATH.endsWith(".apk")) {
+            cps.addAll(getLibJars(appConfig.LIB_PATH));
+            cps.addAll(getJreJars(appConfig.JRE));
+        }
+        // TODO : Once it works fine, need to change the logic
+        cps.add("/Users/palaniappanmuthuraman/Library/Android/sdk/platforms");
         final String classpath = String.join(File.pathSeparator, cps);
         logger.info("Setting Soot ClassPath: {}", classpath);
         System.setProperty("soot.class.path", classpath);
