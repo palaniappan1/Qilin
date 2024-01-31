@@ -54,7 +54,7 @@ public class MahjongPTA extends StagedPTA {
     @Override
     protected void preAnalysis() {
         PTAConfig.v().getPtaConfig().mergeHeap = false;
-        prePTA.pureRun(PTAConfig.v().getAppConfig().sootScene);
+        prePTA.pureRun();
 
         Mahjong.run(prePTA, heapModelMap);
         PAG prePAG = prePTA.getPag();

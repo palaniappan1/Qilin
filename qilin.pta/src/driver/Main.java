@@ -55,6 +55,7 @@ public class Main {
 //        System.out.println("#CALLGRAPH:" + cg.size());
         pta = PTAFactory.createPTA(PTAConfig.v().getPtaConfig().ptaPattern);
         pta.run(PTAConfig.v().getAppConfig().sootScene);
+        System.out.println("Number of call graph edges " + pta.getCgb().calledges.size());
         return pta;
     }
 
@@ -126,13 +127,21 @@ public class Main {
             Options.v().set_include(appConfig.INCLUDE);
         }
 
+        if(appConfig.WHOLE_PROGRAM_ANALYSIS){
+            Options.v().set_whole_program(true);
+            Options.v().set_no_bodies_for_excluded(true);
+            Options.v().setPhaseOption("jb", "use-original-names:true");
+            Options.v().set_prepend_classpath(false);
+            Options.v().setPhaseOption("cg", "all-reachable:true");
+        }
+
         if (appConfig.EXCLUDE != null) {
             Options.v().set_no_bodies_for_excluded(true);
             Options.v().set_exclude(appConfig.EXCLUDE);
         }
 
         // configure callgraph construction algorithm
-        configureCallgraphAlg(config.callgraphAlg);
+//        configureCallgraphAlg(config.callgraphAlg);
 
         Options.v().setPhaseOption("jb", "use-original-names:true");
         Options.v().setPhaseOption("jb", "model-lambdametafactory:false");
@@ -144,6 +153,7 @@ public class Main {
 
         Options.v().set_keep_line_number(true);
         Options.v().set_full_resolver(true);
+        Options.v().set_ignore_resolving_levels(true);
 
         // Options.v().set_src_prec(Options.src_prec_class);
         Options.v().set_src_prec(Options.src_prec_only_class);
@@ -264,12 +274,22 @@ public class Main {
         return cg;
     }
 
-    public static void mainCG(String[] args) {
+    public static void mainCG(Scene scene, String[] args) {
+        new PTAOption().parseCommandLine(args);
+        if(scene != null) {
+            PTAScene.v(scene);
+        }
+        else{
+            setupSoot();
+        }
         Stopwatch cgTimer = Stopwatch.newAndStart("Main CG");
         long pid = ProcessHandle.current().pid();
         MemoryWatcher memoryWatcher = new MemoryWatcher(pid, "Main CG");
         memoryWatcher.start();
-        runCallgraphAlg(args);
+        logger.info("Constructing the callgraph using " + PTAConfig.v().callgraphAlg + "...");
+//        runCallgraphAlg(args);
+        PackManager.v().getPack("cg").apply();
+        System.out.println("#CALLGRAPH:" + PTAScene.v().getCallGraph().size());
         cgTimer.stop();
         System.out.println(cgTimer);
         memoryWatcher.stop();

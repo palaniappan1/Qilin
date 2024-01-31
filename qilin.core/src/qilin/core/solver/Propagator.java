@@ -28,5 +28,5 @@ public abstract class Propagator {
     /**
      * Actually does the propagation.
      */
-    public abstract void propagate(boolean isSceneProvided);
+    public abstract void propagate();
 }

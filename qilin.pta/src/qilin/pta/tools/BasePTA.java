@@ -24,7 +24,6 @@ import qilin.core.builder.CallGraphBuilder;
 import qilin.core.pag.PAG;
 import qilin.core.solver.Propagator;
 import qilin.core.solver.Solver;
-import qilin.pta.PTAConfig;
 import qilin.stat.IEvaluator;
 import qilin.stat.SimplifiedEvaluator;
 import qilin.util.PTAUtils;
@@ -59,7 +58,7 @@ public abstract class BasePTA extends CorePTA {
     @Override
     public void run(boolean isSceneProvided) {
         evaluator.begin();
-        pureRun(isSceneProvided);
+        pureRun();
         evaluator.end();
         dumpStats();
 //        System.out.println(evaluator());

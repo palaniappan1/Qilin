@@ -116,6 +116,11 @@ public class CoreConfig {
          */
         public String MAIN_CLASS = null;
 
+        /** To perform whole app analysis
+         * */
+
+        public boolean WHOLE_PROGRAM_ANALYSIS = false;
+
         /**
          * Whether SootScene is provided.
          * */

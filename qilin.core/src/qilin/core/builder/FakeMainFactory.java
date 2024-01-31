@@ -27,8 +27,6 @@ import soot.jimple.JimpleBody;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class FakeMainFactory extends ArtificialMethod {
     public static int implicitCallEdges;
@@ -72,13 +70,13 @@ public class FakeMainFactory extends ArtificialMethod {
         return ret;
     }
 
-    public SootMethod getFakeMain() {
+    public SootMethod getFakeMain(List<SootMethod> entryPoints) {
         if (body == null) {
             synchronized (this) {
                 if (body == null) {
                     this.method.setSource((m, phaseName) -> new JimpleBody(this.method));
                     this.body = PTAUtils.getMethodBody(method);
-                    makeFakeMain();
+                    makeFakeMain(entryPoints);
                 }
             }
         }
@@ -93,21 +91,24 @@ public class FakeMainFactory extends ArtificialMethod {
         return getStaticFieldRef("FakeMain", "globalThrow");
     }
 
-    private void makeFakeMain() {
+    private void makeFakeMain(List<SootMethod> entryPoints) {
+        if(entryPoints.isEmpty()){
+            entryPoints = getEntryPoints();
+        }
         implicitCallEdges = 0;
-        for (SootMethod entry : getEntryPoints()) {
+        for (SootMethod entry : entryPoints) {
             if (entry.isStatic()) {
                 if (entry.getSubSignature().equals("void main(java.lang.String[])")) {
                     Value mockStr = getNew(RefType.v("java.lang.String"));
                     Value strArray = getNewArray(RefType.v("java.lang.String"));
                     addAssign(getArrayRef(strArray), mockStr);
                     addInvoke(entry.getSignature(), strArray);
-                    implicitCallEdges++;
-                } else if (CoreConfig.v().getPtaConfig().clinitMode != CoreConfig.ClinitMode.ONFLY || !entry.isStaticInitializer()) {
-                    // in the on fly mode, we won't add a call directly for <clinit> methods.
-                    addInvoke(entry.getSignature());
-                    implicitCallEdges++;
-                }
+                    implicitCallEdges++;}
+//                } else if (CoreConfig.v().getPtaConfig().clinitMode != CoreConfig.ClinitMode.ONFLY || !entry.isStaticInitializer()) {
+//                    // in the on fly mode, we won't add a call directly for <clinit> methods.
+//                    addInvoke(entry.getSignature());
+//                    implicitCallEdges++;
+//                }
             }
         }
         if (CoreConfig.v().getPtaConfig().singleentry) {
@@ -138,13 +139,13 @@ public class FakeMainFactory extends ArtificialMethod {
 
 
         // ClassLoader
-        Value defaultClassLoader = getNew(RefType.v("sun.misc.Launcher$AppClassLoader"));
-        addInvoke(defaultClassLoader, "<java.lang.ClassLoader: void <init>()>");
-        Value vClass = getNextLocal(RefType.v("java.lang.Class"));
-        Value vDomain = getNextLocal(RefType.v("java.security.ProtectionDomain"));
-        addInvoke(defaultClassLoader, "<java.lang.ClassLoader: java.lang.Class loadClassInternal(java.lang.String)>", sv);
-        addInvoke(defaultClassLoader, "<java.lang.ClassLoader: void checkPackageAccess(java.lang.Class,java.security.ProtectionDomain)>", vClass, vDomain);
-        addInvoke(defaultClassLoader, "<java.lang.ClassLoader: void addClass(java.lang.Class)>", vClass);
+//        Value defaultClassLoader = getNew(RefType.v("sun.misc.Launcher$AppClassLoader"));
+//        addInvoke(defaultClassLoader, "<java.lang.ClassLoader: void <init>()>");
+//        Value vClass = getNextLocal(RefType.v("java.lang.Class"));
+//        Value vDomain = getNextLocal(RefType.v("java.security.ProtectionDomain"));
+//        addInvoke(defaultClassLoader, "<java.lang.ClassLoader: java.lang.Class loadClassInternal(java.lang.String)>", sv);
+//        addInvoke(defaultClassLoader, "<java.lang.ClassLoader: void checkPackageAccess(java.lang.Class,java.security.ProtectionDomain)>", vClass, vDomain);
+//        addInvoke(defaultClassLoader, "<java.lang.ClassLoader: void addClass(java.lang.Class)>", vClass);
 
         // PrivilegedActionException
         Value privilegedActionException = getNew(RefType.v("java.security.PrivilegedActionException"));

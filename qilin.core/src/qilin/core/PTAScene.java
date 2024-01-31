@@ -26,6 +26,7 @@ import soot.util.Chain;
 import soot.util.IterableNumberer;
 import soot.util.StringNumberer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -97,7 +98,12 @@ public class PTAScene {
                 return dummyMainMethod.get();
             }
         }
-        return this.fakeMainFactory.getFakeMain();
+
+        List<SootMethod> entryPoints = new ArrayList<>();
+        if(sootScene != null){
+            entryPoints = sootScene.getEntryPoints();
+        }
+        return this.fakeMainFactory.getFakeMain(entryPoints);
     }
 
     public Value getFieldCurrentThread() {
@@ -225,6 +231,7 @@ public class PTAScene {
         sootScene.addBasicClass("sun.net.www.protocol.ftp.FtpURLConnection", SootClass.HIERARCHY);
         sootScene.addBasicClass("javax.crypto.extObjectInputStream");
         sootScene.addBasicClass("sun.misc.Launcher$AppClassLoader");
+        sootScene.addBasicClass("java.lang.System");
         /*
          * For simulating the FileSystem class, we need the implementation
          * of the FileSystem, but the classes are not loaded automatically

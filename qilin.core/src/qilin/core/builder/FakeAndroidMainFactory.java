@@ -51,10 +51,10 @@ public class FakeAndroidMainFactory extends ArtificialMethod {
         fakeClass.addMethod(mainMethod);
         fakeClass.setApplicationClass();
         mainMethod.setModifiers(java.lang.reflect.Modifier.PUBLIC | java.lang.reflect.Modifier.STATIC);
-        LocalGenerator lg = Scene.v().createLocalGenerator(body);
-        Local paramLocal = lg.generateLocal(stringArrayType);
-        body.getUnits()
-                .addFirst(Jimple.v().newIdentityStmt(paramLocal, Jimple.v().newParameterRef(stringArrayType, 0)));
+//        LocalGenerator lg = Scene.v().createLocalGenerator(body);
+//        Local paramLocal = lg.generateLocal(stringArrayType);
+//        body.getUnits()
+//                .addFirst(Jimple.v().newIdentityStmt(paramLocal, Jimple.v().newParameterRef(stringArrayType, 0)));
     }
 
     protected SootClass getOrCreateDummyMainClass() {

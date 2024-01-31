@@ -546,12 +546,20 @@ public final class PTAUtils {
     }
 
     public static boolean supportFinalize(AllocNode heap) {
+        Set<String> allowedFinalizeMethods = new HashSet<>(Arrays.asList(
+                "<java.lang.Object: void finalize()>",
+                "<java.io.FileOutputStream: void finalize()>",
+                "<java.io.RandomAccessFile: void finalize()>",
+                "<java.lang.Enum: void finalize()>",
+                "<android.media.MediaRecorder: void finalize()>",
+                "<java.io.FileInputStream: void finalize()>",
+                "<com.mb.bdapp.db.DBService: void finalize()>"
+        ));
         NumberedString sigFinalize = PTAScene.v().getSubSigNumberer().findOrAdd("void finalize()");
         Type type = heap.getType();
         if (type instanceof RefType refType && type != RefType.v("java.lang.Object")) {
             SootMethod finalizeMethod = VirtualCalls.v().resolveNonSpecial(refType, sigFinalize);
-            if (finalizeMethod != null && (finalizeMethod.toString().equals("<java.lang.Object: void finalize()>") ||
-                    finalizeMethod.toString().equals("<java.io.FileOutputStream: void finalize()>"))) {
+            if (finalizeMethod != null && (allowedFinalizeMethods.contains(finalizeMethod.toString()) || finalizeMethod.toString().contains("finalize"))) {
                 return false;
             }
             return finalizeMethod != null;

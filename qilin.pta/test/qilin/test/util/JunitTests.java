@@ -76,7 +76,7 @@ public abstract class JunitTests {
         PTAConfig.v().getPtaConfig().ptaName = PTAConfig.v().getPtaConfig().ptaPattern.toString();
         System.out.println(PTAConfig.v().getAppConfig().APP_PATH);
         PTA pta = PTAFactory.createPTA(PTAConfig.v().getPtaConfig().ptaPattern);
-        pta.pureRun(PTAConfig.v().getAppConfig().sootScene);
+        pta.pureRun();
         return pta;
     }
 

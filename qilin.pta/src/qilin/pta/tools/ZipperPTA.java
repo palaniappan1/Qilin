@@ -66,7 +66,7 @@ public class ZipperPTA extends StagedPTA {
     @Override
     protected void preAnalysis() {
         Stopwatch sparkTimer = Stopwatch.newAndStart("Spark");
-        prePTA.pureRun(PTAConfig.v().getAppConfig().sootScene);
+        prePTA.pureRun();
         sparkTimer.stop();
         System.out.println(sparkTimer);
         Stopwatch zipperTimer = Stopwatch.newAndStart("Zipper");

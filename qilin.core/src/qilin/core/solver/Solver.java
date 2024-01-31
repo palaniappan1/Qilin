@@ -62,12 +62,12 @@ public class Solver extends Propagator {
     }
 
     @Override
-    public void propagate(boolean isSceneProvided) {
+    public void propagate() {
         final QueueReader<MethodOrMethodContext> newRMs = rmQueue.reader();
         final QueueReader<Node> newPAGEdges = edgeQueue.reader();
         final QueueReader<ExceptionThrowSite> newThrows = throwSiteQueue.reader();
         final QueueReader<VirtualCallSite> newCalls = virtualCallSiteQueue.reader();
-        cgb.initReachableMethods(isSceneProvided);
+        cgb.initReachableMethods();
         processStmts(newRMs);
         pag.getAlloc().forEach((a, set) -> set.forEach(v -> propagatePTS(v, a)));
         while (!valNodeWorkList.isEmpty()) {

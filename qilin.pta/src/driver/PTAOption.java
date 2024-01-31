@@ -77,6 +77,7 @@ public class PTAOption extends Options {
         addOption("pta", "pointstoanalysis", "<k>(c|o)+?(<h>h)?|insens",
                 "Specify Pointer Analysis e.g. 2o1h or 2o -> 2obj+1heap (default value: insens; default h: k-1.)");
         addOption("se", "singleentry", "A lightweight mode with only one main method entry. (default value: false)");
+        addOption("wp","wholeprogram","To perform the whole program analysis");
         addOption("sc", "stringconstants", "Propagate all string constants (default value: false)");
         addOption("pae", "precisearray", "Enable precise Array Element type (default value: false)");
         addOption("pe", "preciseexceptions", "Enable precisely handling exceptions (default value: false)");
@@ -134,6 +135,9 @@ public class PTAOption extends Options {
         }
         if (cmd.hasOption("emptycontextforignoretypes")) {
             PTAConfig.v().getPtaConfig().enforceEmptyCtxForIgnoreTypes = true;
+        }
+        if(cmd.hasOption("wholeprogram")){
+            PTAConfig.v().getAppConfig().WHOLE_PROGRAM_ANALYSIS = true;
         }
         if (cmd.hasOption("clinitmode")) {
             PTAConfig.v().getPtaConfig().clinitMode = PTAConfig.ClinitMode.valueOf(cmd.getOptionValue("clinitmode"));

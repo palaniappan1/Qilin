@@ -121,7 +121,7 @@ public class MethodNodeFactory {
      * Adds the edges required for this statement to the graph.
      */
     private void handleIntraStmt(Stmt s) {
-        s.apply(new AbstractStmtSwitch<>() {
+        s.apply(new AbstractStmtSwitch() {
             public void caseAssignStmt(AssignStmt as) {
                 Value l = as.getLeftOp();
                 Value r = as.getRightOp();
