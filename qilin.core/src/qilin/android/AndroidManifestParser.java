@@ -26,11 +26,11 @@ public class AndroidManifestParser {
         manifest = createManifestParser(new File(APP_PATH));
         Set<String> entryPoints = manifest.getEntryPointClasses();
         entrypoints = new HashSet<>(entryPoints.size());
-        for (String className : entryPoints) {
-            SootClass sc = PTAScene.v().createSootClassUnsafe(className);
-            if (sc != null)
-               entrypoints.add(sc);
-        }
+//        for (String className : entryPoints) {
+//            SootClass sc = PTAScene.v().createSootClassUnsafe(className);
+//            if (sc != null)
+//               entrypoints.add(sc);
+//        }
     }
 
     private IManifestHandler createManifestParser(File file) throws IOException {

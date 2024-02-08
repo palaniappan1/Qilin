@@ -106,15 +106,26 @@ public class CallGraphBuilder {
         });
     }
 
-    public List<MethodOrMethodContext> getEntryPoints() {
+    public List<MethodOrMethodContext> getEntryPoints(boolean isSceneProvided) {
+        // It is for the case of running a jar file with no specific entry points, so we need to use all the entry point methods
+        // as the reachable method to construct the call graph.
+        // If the scene is provided, we can use take the entry points from the scene
+        if(isSceneProvided){
+            List<SootMethod> entryPoints = PTAScene.v().getScene().getEntryPoints();
+            List<MethodOrMethodContext> listOfEntryPoints = new ArrayList<>();
+            entryPoints.forEach(entryPoint -> listOfEntryPoints.add(pta.parameterize(entryPoint, pta.emptyContext())));
+            return listOfEntryPoints;
+        }
+        else {
             Node thisRef = pag.getMethodPAG(PTAScene.v().getFakeMainMethod()).nodeFactory().caseThis();
             thisRef = pta.parameterize(thisRef, pta.emptyContext());
             pag.addEdge(pta.getRootNode(), thisRef);
             return Collections.singletonList(pta.parameterize(PTAScene.v().getFakeMainMethod(), pta.emptyContext()));
+        }
     }
 
-    public void initReachableMethods() {
-        for (MethodOrMethodContext momc : getEntryPoints()) {
+    public void initReachableMethods(boolean isSceneProvided) {
+        for (MethodOrMethodContext momc : getEntryPoints(isSceneProvided)) {
             if (reachMethods.add(momc)) {
                 rmQueue.add(momc);
             }

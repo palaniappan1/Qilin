@@ -21,11 +21,8 @@ package driver;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qilin.CoreConfig;
-import qilin.android.AndroidManifestParser;
 import qilin.core.PTA;
 import qilin.core.PTAScene;
-import qilin.core.builder.FakeAndroidMainFactory;
 import qilin.pta.PTAConfig;
 import qilin.util.MemoryWatcher;
 import qilin.util.PTAUtils;
@@ -35,8 +32,11 @@ import soot.Scene;
 import soot.jimple.toolkits.callgraph.CallGraph;
 import soot.options.Options;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Main {

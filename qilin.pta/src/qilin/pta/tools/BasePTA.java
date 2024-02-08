@@ -58,7 +58,7 @@ public abstract class BasePTA extends CorePTA {
     @Override
     public void run(boolean isSceneProvided) {
         evaluator.begin();
-        pureRun();
+        pureRun(isSceneProvided);
         evaluator.end();
         dumpStats();
 //        System.out.println(evaluator());

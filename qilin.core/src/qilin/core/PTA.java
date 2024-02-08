@@ -56,11 +56,11 @@ public abstract class PTA implements PointsToAnalysis {
     protected abstract CallGraphBuilder createCallGraphBuilder();
 
     public void run(boolean isSceneProvided) {
-        pureRun();
+        pureRun(isSceneProvided);
     }
 
-    public void pureRun() {
-        getPropagator().propagate();
+    public void pureRun(boolean isSceneProvided) {
+        getPropagator().propagate(isSceneProvided);
     }
 
     public PAG getPag() {

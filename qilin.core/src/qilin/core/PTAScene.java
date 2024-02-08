@@ -91,6 +91,7 @@ public class PTAScene {
      * wrapper methods for FakeMain.
      * */
     public SootMethod getFakeMainMethod() {
+        // For android case, we need to find the method with the name "dummyMainMethod" from the scene.
         if(sootScene != null){
             List<SootMethod> entryPoints = sootScene.getEntryPoints();
             Optional<SootMethod> dummyMainMethod = entryPoints.stream().filter(entryPoint -> entryPoint.getName().contains("dummyMainMethod")).findFirst();
@@ -98,7 +99,7 @@ public class PTAScene {
                 return dummyMainMethod.get();
             }
         }
-
+        // For the jar file with no specific entry points, we need to use all the entry points form the scene when creating the fakeMain Method
         List<SootMethod> entryPoints = new ArrayList<>();
         if(sootScene != null){
             entryPoints = sootScene.getEntryPoints();

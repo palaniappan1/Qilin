@@ -19,15 +19,11 @@
 package qilin.core.builder;
 
 import qilin.CoreConfig;
-import qilin.android.AndroidManifestParser;
 import qilin.core.ArtificialMethod;
-import qilin.core.PTAScene;
 import qilin.util.PTAUtils;
 import soot.*;
 import soot.jimple.JimpleBody;
-import soot.options.Options;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -111,6 +107,7 @@ public class FakeMainFactory extends ArtificialMethod {
     }
 
     private void makeFakeMain(List<SootMethod> entryPoints) {
+        // If the entry points are empty then take entry points like how usually QILIN does
         if(entryPoints.isEmpty()){
             entryPoints = getEntryPoints();
         }
